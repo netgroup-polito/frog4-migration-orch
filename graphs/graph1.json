@@ -1,0 +1,113 @@
+{
+	"forwarding-graph": {
+		"id": "bootNatGraph",
+		"domain": "un-node_domain",
+		"VNFs": [{
+			"id": "nat",
+			"name" : "nat",
+            "domain": "un-node_domain",
+            "vnf_template": "K4OT0W",
+			"ports": [{
+				"id": "L2Port:0",
+				"name": "management",
+				"mac": "52:54:00:3e:28:86",
+				"trusted": true
+			}, {
+				"id": "L2Port:1",
+				"name": "to-lan"
+			}, {
+				"id": "L2Port:2",
+				"name": "to-wan"
+			}]
+		}],
+		"end-points": [{
+			"id": "int-mng",
+			"type": "internal",
+			"internal": {
+				"internal-group": "1"
+			}
+		}, {
+			"id": "if1",
+			"type": "interface",
+			"interface": {
+				"if-name": "eth0"
+			}
+		}, {
+			"id": "if-wan",
+			"type": "interface",
+			"interface": {
+				"if-name": "eth1"
+			}
+		}],
+		"big-switch": {
+			"flow-rules": [
+			{
+				"id": "1",
+				"priority": 1,
+				"match": {
+					"port_in": "endpoint:if1"
+				},
+				"actions": [{
+					"output_to_port": "vnf:nat:L2Port:1"
+				}]
+
+			},
+			{
+				"id": "2",
+				"priority": 1,
+				"match": {
+					"port_in": "vnf:nat:L2Port:1"
+				},
+				"actions": [{
+					"output_to_port": "endpoint:if1"
+				}]
+
+			},
+			{
+				"id": "3",
+				"priority": 1,
+				"match": {
+					"port_in": "vnf:nat:L2Port:2"
+				},
+				"actions": [{
+					"output_to_port": "endpoint:if-wan"
+				}]
+
+			},
+			{
+				"id": "4",
+				"priority": 1,
+				"match": {
+					"port_in": "endpoint:if-wan"
+				},
+				"actions": [{
+					"output_to_port": "vnf:nat:L2Port:2"
+				}]
+
+			},
+			{
+				"id": "5",
+				"priority": 1,
+				"match": {
+					"port_in": "vnf:nat:L2Port:0"
+				},
+				"actions": [{
+					"output_to_port": "endpoint:int-mng"
+				}]
+
+			},
+			{
+				"id": "6",
+				"priority": 1,
+				"match": {
+					"port_in": "endpoint:int-mng"
+				},
+				"actions": [{
+					"output_to_port": "vnf:nat:L2Port:0"
+				}]
+
+			}
+			]
+		}
+	}
+}
