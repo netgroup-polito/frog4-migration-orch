@@ -27,7 +27,6 @@ class StatusController():
             resp.raise_for_status()
             return json.loads(resp.text)
         except HTTPError as err:
-            logging.debug("Getting status from old network function...Error!")
             raise err
 
     def push_status(self, json_status):
@@ -36,5 +35,4 @@ class StatusController():
             resp.raise_for_status()
             return resp.text
         except HTTPError as err:
-            logging.debug("Pushing status into new network function...Error!")
             raise err

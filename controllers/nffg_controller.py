@@ -17,8 +17,10 @@ class NffgController():
         self.put_url = self.base_url + "/NF-FG/%s"
         self.delete_url = self.base_url + "/NF-FG/%s"
 
-        self.username = self.configParser.get("orchestrator", "username")
-        self.password = self.configParser.get("orchestrator", "password")
+        execution = self.configParser.get("orchestrator", "execution")
+        if execution.__eq__("debug"):
+            self.username = self.configParser.get("debug-info", "username")
+            self.password = self.configParser.get("debug-info", "password")
         self.authentication_url = self.base_url + "/login"
         self.token = None
 
