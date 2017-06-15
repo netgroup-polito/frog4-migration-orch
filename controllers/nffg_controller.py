@@ -1,6 +1,6 @@
-from config_parser import ConfigParser
+from config import Configuration
 from requests.exceptions import HTTPError
-from exceptions import LoginError
+from exception import LoginError
 import requests
 import logging
 import json
@@ -8,19 +8,17 @@ import json
 class NffgController():
 
     def __init__(self):
-        self.configParser = ConfigParser()
-
-        orchestrator_address = self.configParser.get("orchestrator", "address")
-        orchestrator_port = self.configParser.get("orchestrator", "port")
-        self.base_url = "http://"+str(orchestrator_address)+":"+str(orchestrator_port)
+        orch_address = Configuration().ORCH_ADDRESS
+        orch_port = Configuration().ORCH_PORT
+        self.base_url = "http://"+str(orch_address)+":"+str(orch_port)
         self.post_url = self.base_url + "/NF-FG/"
         self.put_url = self.base_url + "/NF-FG/%s"
         self.delete_url = self.base_url + "/NF-FG/%s"
 
-        execution = self.configParser.get("orchestrator", "execution")
+        execution = Configuration().EXECUTION
         if execution.__eq__("debug"):
-            self.username = self.configParser.get("debug-info", "username")
-            self.password = self.configParser.get("debug-info", "password")
+            self.username = Configuration().USERNAME
+            self.password = Configuration().PASSWORD
         self.authentication_url = self.base_url + "/login"
         self.token = None
 
@@ -37,10 +35,12 @@ class NffgController():
         except HTTPError as err:
             if err.response.status_code == 401:
                 logging.debug("Token expired, getting a new one...")
-                self.getToken(self.user_data)
+                self.getToken(self.username, self.password)
                 resp = requests.put(self.post_url, data=nffg_json, headers=self.headers)
                 resp.raise_for_status()
                 return resp.text
+            else:
+                raise err
         except Exception as ex:
             raise ex
 
@@ -48,30 +48,32 @@ class NffgController():
         try:
             if self.token is None:
                 self.getToken(self.username, self.password)
-            resp = requests.put(self.post_url % (nffg_id), data=nffg_json, headers=self.headers)
+            resp = requests.put(self.put_url % (nffg_id), data=nffg_json, headers=self.headers)
             resp.raise_for_status()
             return resp.text
         except HTTPError as err:
             if err.response.status_code == 401:
                 logging.debug("Token expired, getting a new one...")
-                self.getToken(self.user_data)
-                resp = requests.put(self.post_url % (nffg_id), data=nffg_json, headers=self.headers)
+                self.getToken(self.username, self.password)
+                resp = requests.put(self.put_url % (nffg_id), data=nffg_json, headers=self.headers)
                 resp.raise_for_status()
                 return resp.text
+            else:
+                raise err
         except Exception as ex:
             raise ex
 
     def delete(self, nffg_id):
         try:
             if self.token is None:
-                self.getToken(self.user_data)
+                self.getToken(self.username, self.password)
             resp = requests.delete(self.delete_url % (nffg_id), headers=self.headers)
             resp.raise_for_status()
             return resp.text
         except HTTPError as err:
             if err.response.status_code == 401:
                 logging.debug("Token expired, getting a new one...")
-                self.getToken(self.user_data)
+                self.getToken(self.username, self.password)
                 resp = requests.delete(self.delete_url % (nffg_id), headers=self.headers)
                 resp.raise_for_status()
                 return resp.text

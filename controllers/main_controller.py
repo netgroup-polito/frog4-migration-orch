@@ -1,5 +1,3 @@
-from message_bus import MessageBus
-from config_parser import ConfigParser
 from controllers.nffg_controller import NffgController
 from controllers.status_controller import StatusController
 
@@ -11,7 +9,6 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(me
 class MainController():
 
     def __init__(self):
-        self.configParser = ConfigParser()
         self.statusController = StatusController()
         self.nffgController = NffgController()
 
@@ -33,7 +30,8 @@ class MainController():
         """
         try:
             logging.debug("Deploying graph...")
-            self.graph_id = self.nffgController.post(nffg_json)
+            id = self.nffgController.post(nffg_json)
+            self.graph_id = id
             logging.debug("Deploying graph...done! graph_id = " + self.graph_id)
         except Exception as ex:
             logging.error("Deploying graph...Error!")
@@ -48,12 +46,13 @@ class MainController():
         """
         try:
             logging.debug("Migrating network function...")
-            #self.graph_id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            self.graph_id = id
             logging.debug("Migrating network function...done!")
         except Exception as ex:
             logging.error("Migrating network function...Error!")
             logging.error(ex)
-            self._reset()
+            self.reset()
 
     def migrate_status(self):
         """
@@ -71,7 +70,7 @@ class MainController():
             logging.error(" -> Getting status from old network function...Error!")
             logging.error(ex)
             logging.debug("Migrating status...Error!")
-            self._reset()
+            self.reset()
             return
 
         try:
@@ -82,7 +81,7 @@ class MainController():
             logging.debug(" -> Pushing status into new network function...Error!")
             logging.error(ex)
             logging.debug("Migrating status...Error!")
-            self._reset()
+            self.reset()
         logging.debug("Migrating status...done!")
 
     def delete_old_nf(self, old_nffg_id, new_nffg_json):
@@ -94,12 +93,13 @@ class MainController():
         """
         try:
             logging.debug("Deleting old network function...")
-            self.graph_id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            self.graph_id = id
             logging.debug("Deleting old network function...done!")
         except Exception as ex:
             logging.error("Deleting old network function...Error!")
             logging.error(ex)
-            self._reset()
+            self.reset()
 
     def reset(self):
         if self.graph_id is None:
@@ -109,12 +109,11 @@ class MainController():
             logging.debug(" -> Deleting graph with id: " + self.graph_id + "...")
             self.nffgController.delete(self.graph_id)
             logging.debug(" -> Deleting graph with id: " + self.graph_id + "...done!")
+            self.graph_id = None
             logging.debug("Reset all...done!")
         except Exception as ex:
             logging.error(" -> Deleting graph with id: " + self.graph_id + "...Error!")
             logging.error(ex)
             logging.debug("Reset all...Error!")
-
-
 
 
