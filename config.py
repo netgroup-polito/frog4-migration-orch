@@ -25,13 +25,13 @@ class Configuration(object, metaclass=Singleton):
             #self._LOG_FILE = configParser.get('logging','log_file')
             #self._LOG_LEVEL = configParser.get('logging','log_level')
 
-            self._ORCH_ADDRESS = configParser.get('orchestrator','address')
-            self._ORCH_PORT = configParser.get('orchestrator','port')
+            self._ORCH_ADDRESS = configParser.get('frog4-orchestrator','address')
+            self._ORCH_PORT = configParser.get('frog4-orchestrator','port')
+
+            self._EXECUTION = configParser.get('frog4-orchestrator', 'execution')
 
             self._CONFIGURATION_ORCH_ADDRESS = configParser.get('configuration-orchestrator','address')
             self._CONFIGURATION_ORCH_PORT = configParser.get('configuration-orchestrator','port')
-
-            self._EXECUTION = configParser.get('orchestrator','execution')
 
             self._USERNAME = configParser.get('debug-info','username')
             self._PASSWORD = configParser.get('debug-info','password')
