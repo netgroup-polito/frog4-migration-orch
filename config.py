@@ -22,16 +22,10 @@ class Configuration(object, metaclass=Singleton):
 
         try:
 
-            #self._LOG_FILE = configParser.get('logging','log_file')
-            #self._LOG_LEVEL = configParser.get('logging','log_level')
+            self._GLOBAL_ORCH_URL = configParser.get('global-orchestrator','orchestrator')
+            self._CONFIGURATION_ORCH_URL = configParser.get('configuration-orchestrator','orchestrator')
 
-            self._ORCH_ADDRESS = configParser.get('frog4-orchestrator','address')
-            self._ORCH_PORT = configParser.get('frog4-orchestrator','port')
-
-            self._EXECUTION = configParser.get('frog4-orchestrator', 'execution')
-
-            self._CONFIGURATION_ORCH_ADDRESS = configParser.get('configuration-orchestrator','address')
-            self._CONFIGURATION_ORCH_PORT = configParser.get('configuration-orchestrator','port')
+            self._DEBUG = configParser.get('execution', 'debug')
 
             self._USERNAME = configParser.get('debug-info','username')
             self._PASSWORD = configParser.get('debug-info','password')
@@ -42,35 +36,18 @@ class Configuration(object, metaclass=Singleton):
         except Exception as ex:
             raise WrongConfigurationFile(str(ex))
 
-    """
-    @property
-    def LOG_FILE(self):
-        return self._LOG_FILE
 
     @property
-    def LOG_LEVEL(self):
-        return self._LOG_LEVEL
-    """
+    def GLOBAL_ORCH_URL(self):
+        return self._GLOBAL_ORCH_URL
 
     @property
-    def ORCH_ADDRESS(self):
-        return self._ORCH_ADDRESS
+    def CONFIGURATION_ORCH_URL(self):
+        return self._CONFIGURATION_ORCH_URL
 
     @property
-    def ORCH_PORT(self):
-        return self._ORCH_PORT
-
-    @property
-    def CONFIGURATION_ORCH_ADDRESS(self):
-        return self._CONFIGURATION_ORCH_ADDRESS
-
-    @property
-    def CONFIGURATION_ORCH_PORT(self):
-        return self._CONFIGURATION_ORCH_PORT
-
-    @property
-    def EXECUTION(self):
-        return self._EXECUTION
+    def DEBUG(self):
+        return self._DEBUG
 
     @property
     def USERNAME(self):

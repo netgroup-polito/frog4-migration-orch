@@ -8,15 +8,13 @@ import json
 class NffgController():
 
     def __init__(self):
-        orch_address = Configuration().ORCH_ADDRESS
-        orch_port = Configuration().ORCH_PORT
-        self.base_url = "http://"+str(orch_address)+":"+str(orch_port)
+        self.base_url = Configuration().GLOBAL_ORCH_URL
         self.post_url = self.base_url + "/NF-FG/"
         self.put_url = self.base_url + "/NF-FG/%s"
         self.delete_url = self.base_url + "/NF-FG/%s"
 
-        execution = Configuration().EXECUTION
-        if execution.__eq__("debug"):
+        debug = Configuration().DEBUG
+        if debug:
             self.username = Configuration().USERNAME
             self.password = Configuration().PASSWORD
         self.authentication_url = self.base_url + "/login"

@@ -7,8 +7,7 @@ import json
 class StatusController():
 
     def __init__(self):
-        self.configuration_orch_address = Configuration().CONFIGURATION_ORCH_ADDRESS
-        self.configuration_orch_port = Configuration().CONFIGURATION_ORCH_PORT
+        self.base_url = Configuration().CONFIGURATION_ORCH_URL
 
         self.headers = {'Content-Type': 'application/json'}
 
