@@ -1,5 +1,7 @@
 from controllers.nffg_controller import NffgController
 from controllers.status_controller import StatusController
+from requests.exceptions import HTTPError
+from exception import LoginError
 
 from pprint import pprint
 import logging
@@ -12,7 +14,10 @@ class MainController():
         self.statusController = StatusController()
         self.nffgController = NffgController()
 
+        self.tenant_id = None
         self.graph_id = None
+        self.from_vnf_id = None
+        self.to_vnf_id = None
 
     def login(self, username, password):
         """
@@ -21,8 +26,17 @@ class MainController():
         :param password: 
         :return: token
         """
+        try:
+            logging.debug("Trying to login...")
+            token = self.nffgController.getToken(username, password)
+            logging.debug("Trying to login...done!")
+            self.tenant_id = username
+            return token
+        except HTTPError as err:
+            logging.error("Trying to login...Error!")
+            raise LoginError("login failed: " + str(err))
 
-    def deploy_graph(self, nffg_json):
+    def deploy_graph(self, token, nffg_json):
         """
         Deploy the initial graph
         :param nffg_json: initial graph to deploy 
@@ -30,14 +44,16 @@ class MainController():
         """
         try:
             logging.debug("Deploying graph...")
-            id = self.nffgController.post(nffg_json)
+            id = self.nffgController.post(token, nffg_json)
             self.graph_id = id
             logging.debug("Deploying graph...done! graph_id = " + self.graph_id)
+            return self.graph_id
+
         except Exception as ex:
             logging.error("Deploying graph...Error!")
             logging.error(ex)
 
-    def migrate_nf(self, old_nffg_id, new_nffg_json):
+    def migrate_nf(self, token, id_nffg_to_update, new_nffg_json):
         """
         Update the graph adding the network function in the other domain
         :param old_nffg_id: id of the current deployed graph
@@ -46,15 +62,16 @@ class MainController():
         """
         try:
             logging.debug("Migrating network function...")
-            id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            id = self.nffgController.update(token, id_nffg_to_update, new_nffg_json)
             self.graph_id = id
             logging.debug("Migrating network function...done!")
+            return self.graph_id
         except Exception as ex:
             logging.error("Migrating network function...Error!")
             logging.error(ex)
             self.reset()
 
-    def migrate_status(self):
+    def migrate_status(self, from_vnf_id, to_vnf_id):
         """
         Get the current state from the current network function
         and push it into the migrated network function
@@ -63,7 +80,7 @@ class MainController():
         logging.debug("Migrating status...")
         try:
             logging.debug(" -> Getting status from old network function...")
-            json_status = self.statusController.get_status()
+            json_status = self.statusController.get_status(self.tenant_id, self.graph_id, from_vnf_id)
             logging.debug(" -> Getting status from old network function...Done! Status:")
             pprint(json_status)
         except Exception as ex:
@@ -75,7 +92,7 @@ class MainController():
 
         try:
             logging.debug(" -> Pushing status into new network function...")
-            self.statusController.push_status(json_status)
+            self.statusController.push_status(self.tenant_id, self.graph_id, to_vnf_id, json_status)
             logging.debug(" -> Pushing status into new network function...Done!")
         except Exception as ex:
             logging.debug(" -> Pushing status into new network function...Error!")
@@ -84,7 +101,7 @@ class MainController():
             self.reset()
         logging.debug("Migrating status...done!")
 
-    def delete_old_nf(self, old_nffg_id, new_nffg_json):
+    def delete_old_nf(self, token, id_nffg_to_update, new_nffg_json):
         """
         Update the graph, removing the old network function
         :param old_nffg_id: id of the current deployed graph
@@ -93,7 +110,7 @@ class MainController():
         """
         try:
             logging.debug("Deleting old network function...")
-            id = self.nffgController.update(old_nffg_id, new_nffg_json)
+            id = self.nffgController.update(token, id_nffg_to_update, new_nffg_json)
             self.graph_id = id
             logging.debug("Deleting old network function...done!")
         except Exception as ex:

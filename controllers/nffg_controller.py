@@ -23,10 +23,9 @@ class NffgController():
         self.headers = None
 
 
-    def post(self, nffg_json):
+    def post(self, token, nffg_json):
         try:
-            if self.token is None:
-                self.getToken(self.username, self.password)
+            self._set_headers(token)
             resp = requests.put(self.post_url, data=nffg_json, headers=self.headers)
             resp.raise_for_status()
             return resp.text
@@ -42,10 +41,9 @@ class NffgController():
         except Exception as ex:
             raise ex
 
-    def update(self, nffg_id, nffg_json):
+    def update(self, token, nffg_id, nffg_json):
         try:
-            if self.token is None:
-                self.getToken(self.username, self.password)
+            self._set_headers(token)
             resp = requests.put(self.put_url % (nffg_id), data=nffg_json, headers=self.headers)
             resp.raise_for_status()
             return resp.text
@@ -61,10 +59,9 @@ class NffgController():
         except Exception as ex:
             raise ex
 
-    def delete(self, nffg_id):
+    def delete(self, token, nffg_id):
         try:
-            if self.token is None:
-                self.getToken(self.username, self.password)
+            self._set_headers(token)
             resp = requests.delete(self.delete_url % (nffg_id), headers=self.headers)
             resp.raise_for_status()
             return resp.text
@@ -88,9 +85,12 @@ class NffgController():
             resp.raise_for_status()
             logging.debug("Authentication successfully performed")
             self.token = resp.text
-            self.headers = {'Content-Type': 'application/json',
-                'cache-control': 'no-cache',
-                'X-Auth-Token': self.token}
+            self._set_headers(self.token)
         except HTTPError as err:
             logging.error(err)
             raise LoginError("login failed: " + str(err))
+
+    def _set_headers(self, token):
+        self.headers = {'Content-Type': 'application/json',
+                        'cache-control': 'no-cache',
+                        'X-Auth-Token': token}

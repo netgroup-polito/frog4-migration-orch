@@ -22,8 +22,8 @@ class Configuration(object, metaclass=Singleton):
 
         try:
 
-            self._GLOBAL_ORCH_URL = configParser.get('global-orchestrator','orchestrator')
-            self._CONFIGURATION_ORCH_URL = configParser.get('configuration-orchestrator','orchestrator')
+            self._GLOBAL_ORCH_URL = configParser.get('global-orchestrator','global_orch_endpoint')
+            self._CONFIGURATION_ORCH_URL = configParser.get('configuration-orchestrator','config_orch_endpoint')
 
             self._DEBUG = configParser.get('execution', 'debug')
 
@@ -31,6 +31,9 @@ class Configuration(object, metaclass=Singleton):
             self._PASSWORD = configParser.get('debug-info','password')
 
             self._GRAPHS_PATH = configParser.get('graphs','graphs_path')
+
+            self._FROM_VNF_ID = configParser.get('migration','from_vnf_id')
+            self._TO_VNF_ID = configParser.get('migration','to_vnf_id')
 
 
         except Exception as ex:
@@ -60,4 +63,12 @@ class Configuration(object, metaclass=Singleton):
     @property
     def GRAPHS_PATH(self):
         return self._GRAPHS_PATH
+
+    @property
+    def FROM_VNF_ID(self):
+        return self._FROM_VNF_ID
+
+    @property
+    def TO_VNF_ID(self):
+        return self._TO_VNF_ID
 
