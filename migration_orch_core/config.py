@@ -1,4 +1,4 @@
-from exception import WrongConfigurationFile
+from migration_orch_core.exception.wrong_configuration_file import WrongConfigurationFile
 import configparser
 
 class Singleton(type):
@@ -25,16 +25,16 @@ class Configuration(object, metaclass=Singleton):
             self._GLOBAL_ORCH_URL = configParser.get('global-orchestrator','global_orch_endpoint')
             self._CONFIGURATION_ORCH_URL = configParser.get('configuration-orchestrator','config_orch_endpoint')
 
-            self._DEBUG = configParser.get('execution', 'debug')
+            self._REST_ADDRESS = configParser.get('rest_server', 'address')
+            self._REST_PORT = configParser.get('rest_server', 'port')
 
-            self._USERNAME = configParser.get('debug-info','username')
-            self._PASSWORD = configParser.get('debug-info','password')
+            if configParser.has_option('logging', 'log_file'):
+                self._LOG_FILE = configParser.get('logging', 'log_file')
+            else:
+                self._LOG_FILE = None
+            self._LOG_LEVEL = configParser.get('logging', 'log_level')
 
             self._GRAPHS_PATH = configParser.get('graphs','graphs_path')
-
-            self._FROM_VNF_ID = configParser.get('migration','from_vnf_id')
-            self._TO_VNF_ID = configParser.get('migration','to_vnf_id')
-
 
         except Exception as ex:
             raise WrongConfigurationFile(str(ex))
@@ -49,26 +49,22 @@ class Configuration(object, metaclass=Singleton):
         return self._CONFIGURATION_ORCH_URL
 
     @property
-    def DEBUG(self):
-        return self._DEBUG
+    def REST_ADDRESS(self):
+        return self._REST_ADDRESS
 
     @property
-    def USERNAME(self):
-        return self._USERNAME
+    def REST_PORT(self):
+        return self._REST_PORT
 
     @property
-    def PASSWORD(self):
-        return self._PASSWORD
+    def LOG_FILE(self):
+        return self._LOG_FILE
+
+    @property
+    def LOG_LEVEL(self):
+        return self._LOG_LEVEL
 
     @property
     def GRAPHS_PATH(self):
         return self._GRAPHS_PATH
-
-    @property
-    def FROM_VNF_ID(self):
-        return self._FROM_VNF_ID
-
-    @property
-    def TO_VNF_ID(self):
-        return self._TO_VNF_ID
 
