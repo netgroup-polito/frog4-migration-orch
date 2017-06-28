@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="{{ url_for('static', filename='js/lib/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/js.cookie.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+</head>
+<body>
+
+    <form action="select" id="form-login">
+        <input type="text" required id="username" placeholder="Username" />
+        <input type="password" required id="password" placeholder="Password" />
+        <input type="submit" id="btn-login" value="Sign in" />
+    </form>
+
+</body>
+</html>

@@ -26,12 +26,16 @@ class UserLogin(Resource):
             json_data = json.loads(request.data.decode())
             username = json_data['username']
             password = json_data['password']
-            token = mainController.login(username, password)
-            return Response(token, status=200, mimetype="application/json")
+            #token = mainController.login(username, password)
+            token = "123"+username+":"+password
+            resp = {}
+            resp['token'] = token
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except HTTPError as err:
-            return Response(json.dumps(err.message), status=err.response.status_code, mimetype="application/json")
+            return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
+            logging.debug("Exception: " + str(err))
             return Response(json.dumps(str(err)), status=500, mimetype="application/json")
 
 @root_ns.route('/graphs', methods=['POST'])
@@ -46,7 +50,12 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            return mainController.post_graph(token, request.data.decode())
+            print(request.data.decode())
+            #graph_id = mainController.post_graph(token, request.data.decode())
+            graph_id = "graph001"
+            resp = {}
+            resp['id'] = graph_id
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except TokenExpired as err:
             return Response(json.dumps(err.get_mess()), status=401, mimetype="application/json")
@@ -64,7 +73,12 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            return mainController.update_graph(token, id, request.data.decode())
+            print(request.data.decode())
+            #graph_id = mainController.update_graph(token, id, request.data.decode())
+            graph_id = "graph002"
+            resp = {}
+            resp['id'] = graph_id
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except TokenExpired as err:
             return Response(json.dumps(err.get_mess()), status=401, mimetype="application/json")
@@ -78,7 +92,7 @@ class Graph(Resource):
     @root_ns.response(401, 'Unauthorized.')
     @root_ns.response(404, 'Not Found')
     @root_ns.response(500, 'Internal Error')
-    def delete(self):
+    def delete(self, id):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
@@ -105,7 +119,13 @@ class Status(Resource):
         graph_id = request.headers["graph_id"]
         vnf_id = request.headers["vnf_id"]
         try:
-            return mainController.get_status_from_nf(tenant_id, graph_id, vnf_id)
+            #return mainController.get_status_from_nf(tenant_id, graph_id, vnf_id)
+            resp = {}
+            resp['nat'] = "ciao"
+            resp['interfaces'] = "ifentries"
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
+
+
 
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
@@ -124,7 +144,9 @@ class Status(Resource):
         graph_id = request.headers["graph_id"]
         vnf_id = request.headers["vnf_id"]
         try:
-            return mainController.push_status_into_nf(tenant_id, graph_id, vnf_id, request.data.decode())
+            print("state to push: " + request.data.decode())
+            #return mainController.push_status_into_nf(tenant_id, graph_id, vnf_id, request.data.decode())
+            return Response(status=200, mimetype="application/json")
 
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")

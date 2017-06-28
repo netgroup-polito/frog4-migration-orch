@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select</title>
+    <script src="{{ url_for('static', filename='js/lib/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/js.cookie.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+    <script src="{{ url_for('static', filename='graphs/graph1.json') }}"></script>
+    <script src="{{ url_for('static', filename='graphs/graph2.json') }}"></script>
+    <script src="{{ url_for('static', filename='graphs/graph3.json') }}"></script>
+</head>
+<body>
+
+    <input type="button" id="btn-deploy_initial_graph" value="Deploy first NAT">
+    <input type="button" id="btn-deploy_second_nat" value="Deploy second NAT">
+    <input type="button" id="btn-migrate_state" value="Migrate state">
+    <input type="button" id="btn-delete_old_nat" value="Move traffic to second NAT">
+    <input type="button" id="btn-undeploy_everything" value="Undeploy everything">
+
+</body>
+</html>

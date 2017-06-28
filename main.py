@@ -4,6 +4,7 @@ from flask import Flask, request
 from migration_orch_core.config import Configuration
 from migration_orch_core.rest_api.api import root_blueprint
 from migration_orch_core.rest_api.resources.migration import api as migration_api
+from web_gui.gui_blueprint import web_gui
 
 conf = Configuration()
 
@@ -25,8 +26,9 @@ else:
 
 # Rest application
 if migration_api is not None:
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder = 'web_gui/static')
     app.register_blueprint(root_blueprint)
+    app.register_blueprint(web_gui)
     logging.info("Flask Successfully started")
 
 
