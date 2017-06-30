@@ -30,7 +30,7 @@ class UserLogin(Resource):
             return Response(token, status=200, mimetype="application/json")
 
         except HTTPError as err:
-            return Response(json.dumps(err.message), status=err.response.status_code, mimetype="application/json")
+            return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
             return Response(json.dumps(str(err)), status=500, mimetype="application/json")
 
