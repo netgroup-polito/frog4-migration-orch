@@ -1,5 +1,5 @@
 import json
-import requests, Response
+import requests
 from requests.exceptions import HTTPError
 
 from migration_orch_core.config import Configuration
