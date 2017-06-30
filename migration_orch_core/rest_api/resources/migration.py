@@ -27,10 +27,12 @@ class UserLogin(Resource):
             username = json_data['username']
             password = json_data['password']
             token = mainController.login(username, password)
-            return Response(token, status=200, mimetype="application/json")
+            resp = {}
+            resp['token'] = token
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except HTTPError as err:
-            return Response(json.dumps(err.message), status=err.response.status_code, mimetype="application/json")
+            return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
             return Response(json.dumps(str(err)), status=500, mimetype="application/json")
 
@@ -46,7 +48,10 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            return mainController.post_graph(token, request.data.decode())
+            graph_id = mainController.post_graph(token, request.data.decode())
+            resp = {}
+            resp['id'] = graph_id
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except TokenExpired as err:
             return Response(json.dumps(err.get_mess()), status=401, mimetype="application/json")
@@ -64,7 +69,10 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            return mainController.update_graph(token, id, request.data.decode())
+            graph_id = mainController.update_graph(token, id, request.data.decode())
+            resp = {}
+            resp['id'] = graph_id
+            return Response(json.dumps(resp), status=200, mimetype="application/json")
 
         except TokenExpired as err:
             return Response(json.dumps(err.get_mess()), status=401, mimetype="application/json")
