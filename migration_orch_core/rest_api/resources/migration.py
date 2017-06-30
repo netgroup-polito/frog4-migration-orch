@@ -78,7 +78,7 @@ class Graph(Resource):
     @root_ns.response(401, 'Unauthorized.')
     @root_ns.response(404, 'Not Found')
     @root_ns.response(500, 'Internal Error')
-    def delete(self):
+    def delete(self, id):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
