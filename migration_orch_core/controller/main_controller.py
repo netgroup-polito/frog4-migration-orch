@@ -94,9 +94,9 @@ class MainController():
         configurationService = ConfigurationService()
         try:
             logging.debug(" -> Getting status from old network function...")
-            json_status = configurationService.get_status(tenant_id, graph_id, vnf_id)
-            logging.debug(" -> Getting status from old network function...Done! Status:")
-            pprint(json_status)
+            resp = configurationService.get_status(tenant_id, graph_id, vnf_id)
+            logging.debug(" -> Getting status from old network function...Done!")
+            return resp
 
         except HTTPError as err:
             logging.error(" -> Getting status from old network function...Error! HttpErrorException: " + str(err))
@@ -117,8 +117,9 @@ class MainController():
         configurationService = ConfigurationService()
         try:
             logging.debug(" -> Pushing status into new network function...")
-            configurationService.push_status(tenant_id, graph_id, vnf_id, json_status)
+            resp = configurationService.push_status(tenant_id, graph_id, vnf_id, json_status)
             logging.debug(" -> Pushing status into new network function...Done!")
+            return resp
 
         except HTTPError as err:
             logging.error(" -> Pushing status from old network function...Error! HttpErrorException: " + str(err))
