@@ -24,7 +24,7 @@ class MainController():
             return token
 
         except HTTPError as err:
-            logging.error("Trying to login...Error! HTTPError: " + err.message)
+            logging.error("Trying to login...Error! HTTPError: " + str(err))
             raise err
         except Exception as err:
             logging.error("Trying to login...Error! Exception: " + str(err))
