@@ -123,6 +123,7 @@ class Status(Resource):
     @root_ns.param("tenant_id", "Tenant ID", "header", type="string", required=True)
     @root_ns.param("graph_id", "Graph ID", "header", type="string", required=True)
     @root_ns.param("vnf_id", "Vnf ID", "header", type="string", required=True)
+    @root_ns.param("Status", "Status to push", "body", type="string", required=True)
     @root_ns.response(200, 'Ok')
     @root_ns.response(404, 'Not Found')
     @root_ns.response(500, 'Internal Error')
