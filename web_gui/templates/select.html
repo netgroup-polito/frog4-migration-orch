@@ -12,11 +12,22 @@
 </head>
 <body>
 
-    <input type="button" id="btn-deploy_initial_graph" value="Deploy first NAT">
-    <input type="button" id="btn-deploy_second_nat" value="Deploy second NAT">
-    <input type="button" id="btn-migrate_state" value="Migrate state">
-    <input type="button" id="btn-delete_old_nat" value="Move traffic to second NAT">
-    <input type="button" id="btn-undeploy_everything" value="Undeploy everything">
+    <div style="margin:100px auto" align="center">
+		<img src="{{ url_for('static', filename='images/polito.png') }}" width="150"/>
+    </div>
+
+    <font size="5">
+		<div style="margin:50px auto" align="center">
+		<h1>Nat Live Migration</h1>
+            <table>
+                <tr><td><input type="button" id="btn-deploy_initial_graph" value="Deploy first NAT"></td><td class="log-deploy_initial_graph"></td></tr>
+                <tr><td><input type="button" id="btn-deploy_second_nat" value="Deploy second NAT"></td><td class="log-deploy_second_nat"></td></tr>
+                <tr><td><input type="button" id="btn-migrate_state" value="Migrate state"></td><td class="log-migrate_state"></td></tr>
+                <tr><td><input type="button" id="btn-delete_old_nat" value="Move traffic to second NAT"></td><td class="log-delete_old_nat"></td></tr>
+                <tr><td><input type="button" id="btn-undeploy_everything" value="Undeploy everything"></td><td class="log-undeploy_everything"></td></tr>
+		    </table>
+		</div>
+    </font>
 
 </body>
 </html>
