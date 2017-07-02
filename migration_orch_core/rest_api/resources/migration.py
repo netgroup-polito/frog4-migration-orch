@@ -114,14 +114,8 @@ class Status(Resource):
         graph_id = request.headers["graph_id"]
         vnf_id = request.headers["vnf_id"]
         try:
-            #return mainController.get_status_from_nf(tenant_id, graph_id, vnf_id)
-            resp = {}
-            resp['nat'] = "ciao"
-            resp['interfaces'] = "ifentries"
-            return Response(json.dumps(resp), status=200, mimetype="application/json")
-
-
-
+            return mainController.get_status_from_nf(tenant_id, graph_id, vnf_id)
+        
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
@@ -140,9 +134,7 @@ class Status(Resource):
         graph_id = request.headers["graph_id"]
         vnf_id = request.headers["vnf_id"]
         try:
-            print("state to push: " + request.data.decode())
-            #return mainController.push_status_into_nf(tenant_id, graph_id, vnf_id, request.data.decode())
-            return Response(status=200, mimetype="application/json")
+            return mainController.push_status_into_nf(tenant_id, graph_id, vnf_id, request.data.decode())
 
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
