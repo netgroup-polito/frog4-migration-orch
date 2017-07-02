@@ -1,5 +1,4 @@
-var graph1 = 
-{
+var graph1 = {
 	"forwarding-graph": {
 		"name": "ISP-Graph",
 		"VNFs": [{

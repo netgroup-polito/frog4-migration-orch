@@ -26,7 +26,7 @@ class UserLogin(Resource):
             json_data = json.loads(request.data.decode())
             username = json_data['username']
             password = json_data['password']
-	    token = mainController.login(username, password)
+            token = mainController.login(username, password)
             resp = {}
             resp['token'] = token
             return Response(json.dumps(resp), status=200, mimetype="application/json")
@@ -49,7 +49,7 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-	    graph_id = mainController.post_graph(token, request.data.decode())
+            graph_id = mainController.post_graph(token, request.data.decode())
             resp = {}
             resp['id'] = graph_id
             return Response(json.dumps(resp), status=200, mimetype="application/json")
