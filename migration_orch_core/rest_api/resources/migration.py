@@ -34,6 +34,7 @@ class UserLogin(Resource):
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
+            logging.debug("Exception: " + str(err))
             return Response(json.dumps(str(err)), status=500, mimetype="application/json")
 
 @root_ns.route('/graphs', methods=['POST'])
@@ -114,7 +115,7 @@ class Status(Resource):
         vnf_id = request.headers["vnf_id"]
         try:
             return mainController.get_status_from_nf(tenant_id, graph_id, vnf_id)
-
+        
         except HTTPError as err:
             return Response(json.dumps(str(err)), status=err.response.status_code, mimetype="application/json")
         except Exception as err:
