@@ -26,8 +26,7 @@ class UserLogin(Resource):
             json_data = json.loads(request.data.decode())
             username = json_data['username']
             password = json_data['password']
-            #token = mainController.login(username, password)
-            token = "123"+username+":"+password
+	    token = mainController.login(username, password)
             resp = {}
             resp['token'] = token
             return Response(json.dumps(resp), status=200, mimetype="application/json")
@@ -50,9 +49,7 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            print(request.data.decode())
-            #graph_id = mainController.post_graph(token, request.data.decode())
-            graph_id = "graph001"
+	    graph_id = mainController.post_graph(token, request.data.decode())
             resp = {}
             resp['id'] = graph_id
             return Response(json.dumps(resp), status=200, mimetype="application/json")
@@ -73,9 +70,7 @@ class Graph(Resource):
         mainController = MainController()
         token = request.headers['X-Auth-Token']
         try:
-            print(request.data.decode())
-            #graph_id = mainController.update_graph(token, id, request.data.decode())
-            graph_id = "graph002"
+            graph_id = mainController.update_graph(token, id, request.data.decode())
             resp = {}
             resp['id'] = graph_id
             return Response(json.dumps(resp), status=200, mimetype="application/json")
@@ -135,6 +130,7 @@ class Status(Resource):
     @root_ns.param("tenant_id", "Tenant ID", "header", type="string", required=True)
     @root_ns.param("graph_id", "Graph ID", "header", type="string", required=True)
     @root_ns.param("vnf_id", "Vnf ID", "header", type="string", required=True)
+    @root_ns.param("Status", "Status to push", "body", type="string", required=True)
     @root_ns.response(200, 'Ok')
     @root_ns.response(404, 'Not Found')
     @root_ns.response(500, 'Internal Error')

@@ -27,7 +27,7 @@ class ConfigurationService():
         try:
             resp = requests.put(push_status_url, data=json_status, headers=headers)
             resp.raise_for_status()
-            return resp.text
+            return json.loads(resp.text)
         except HTTPError as err:
             raise err
         except Exception as ex:
