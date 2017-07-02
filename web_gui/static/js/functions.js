@@ -87,7 +87,7 @@ $(document).ready(function() {
                 var new_graph_id = resp.id;
                 logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + new_graph_id);
                 Cookies.set("graph_id", new_graph_id);
-                logOnConsole("[updateGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'))
+                logOnConsole("[updateGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
                 $(id_log).html("Ok!");
             },
             error: function(err) {
@@ -197,6 +197,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[postGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
+                $(params.data.id_log).html("Error!");
             });
         }else{
             postGraphRequest(token, params.data.graph, params.data.id_log);
@@ -217,6 +218,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[updateGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
+                $(params.data.id_log).html("Error!");
             });
         }else{
             updateGraphRequest(token, graph_id, params.data.graph, params.data.id_log);
@@ -237,6 +239,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[deleteGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
+                $(params.data.id_log).html("Error!");
             });
         }else{
             deleteGraphRequest(token, graph_id, params.data.id_log);
