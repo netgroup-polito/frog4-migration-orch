@@ -52,7 +52,7 @@ $(document).ready(function() {
                 logOnConsole("[postGraph] posting graph using token: " + token + "...done! Graph_id: " + graph_id);
                 Cookies.set("graph_id", graph_id);
                 logOnConsole("[postGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
-                $(id_log).html("Ok!");
+                $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
             },
             error: function(err) {
                 if(err.status===401){
@@ -64,12 +64,12 @@ $(document).ready(function() {
                     promise.fail(function (err){
                         logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
                         logOnConsole("Exception: " + err.status + " " + err.statusText + " " + err.responseText);
-                        $(id_log).html("Error!");
+                        $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                     });
                 }else{
                     logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
                     logOnConsole("Exception: " + err.status + " " + err.statusText + " " + err.responseText);
-                    $(id_log).html("Error!");
+                    $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                 }
             }
         });
@@ -88,7 +88,7 @@ $(document).ready(function() {
                 logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + new_graph_id);
                 Cookies.set("graph_id", new_graph_id);
                 logOnConsole("[updateGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
-                $(id_log).html("Ok!");
+                $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
             },
             error: function(err) {
                 if(err.status===401){
@@ -100,12 +100,12 @@ $(document).ready(function() {
                     promise.fail(function (err){
                         logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
                         logOnConsole("Exception:" + err.status + " " + err.statusText + " " + err.responseText);
-                        $(id_log).html("Error!");
+                        $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                     });
                 }else {
                     logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
                     logOnConsole("Exception:" + err.status + " " + err.statusText + " " + err.responseText);
-                    $(id_log).html("Error!");
+                    $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                 }
             }
         });
@@ -121,7 +121,7 @@ $(document).ready(function() {
                 logOnConsole("[deleteGraph] deleting graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + graph_id);
                 logOnConsole("[deleteGraph] Cookie 'graph_id': " + Cookies.get('graph_id') + "removed");
                 Cookies.remove("graph_id");
-                $(id_log).html("Ok!");
+                $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
             },
             error: function(err) {
                 if(err.status===401){
@@ -133,12 +133,12 @@ $(document).ready(function() {
                     promise.fail(function (err){
                         logOnConsole("[deleteGraph] deleting graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
                         logOnConsole("Error:" + err.status + " " + err.statusText + " " + err.responseText);
-                        $(id_log).html("Error!");
+                        $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                     });
                 }else {
                     logOnConsole("[deleteGraph] deleting graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
                     logOnConsole("Error:" + err.status + " " + err.statusText + " " + err.responseText);
-                    $(id_log).html("Error!");
+                    $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                 }
             }
         });
@@ -197,7 +197,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[postGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
-                $(params.data.id_log).html("Error!");
+                $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
         }else{
             postGraphRequest(token, params.data.graph, params.data.id_log);
@@ -218,7 +218,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[updateGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
-                $(params.data.id_log).html("Error!");
+                $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
         }else{
             updateGraphRequest(token, graph_id, params.data.graph, params.data.id_log);
@@ -239,7 +239,7 @@ $(document).ready(function() {
             promise.fail(function (err){
                 logOnConsole("[deleteGraph] token is null, so perform the login...failed!");
                 logOnConsole("Exception: " + err);
-                $(params.data.id_log).html("Error!");
+                $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
         }else{
             deleteGraphRequest(token, graph_id, params.data.id_log);
@@ -258,30 +258,29 @@ $(document).ready(function() {
                 promise.done(function(data){
                     logOnConsole("[migrateState] pushStateIntoVnf success!");
                     logOnConsole("[migrateState] Migration completed!");
-                    $(params.data.id_log).html("Ok!");
+                    $(params.data.id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
                 });
                 promise.fail(function(err){
                     logOnConsole("[migrateState] pushStateIntoVnf failure!");
                     logOnConsole("Exception: " + err);
                     logOnConsole("[migrateState] Migration failed!");
-                    $(params.data.id_log).html("Error!");
+                    $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
                 });
             });
             promise.fail(function(err){
                 logOnConsole("[migrateState] getStateFromVnf failure!");
                 logOnConsole("Exception: " + err);
                 logOnConsole("[migrateState] Migration failed!");
-                $(params.data.id_log).html("Error!");
+                $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
     }
 
 
-    $("#form-login").submit(performLogin);
-    $("#btn-deploy_initial_graph").click({ graph: graph1, id_log: ".log-deploy_initial_graph" }, postGraph);
-    $("#btn-deploy_second_nat").click({ graph: graph2, id_log: ".log-deploy_second_nat" }, updateGraph);
-    $("#btn-migrate_state").click({id_log: ".log-migrate_state"}, migrateState);
-    $("#btn-delete_old_nat").click({ graph: graph3, id_log: ".log-delete_old_nat" }, updateGraph);
-    $("#btn-undeploy_everything").click({id_log: ".log-undeploy_everything"}, deleteGraph);
+    $("#btn-deploy_initial_graph").click({ graph: graph1, id_log: "#btn-deploy_initial_graph" }, postGraph);
+    $("#btn-deploy_second_nat").click({ graph: graph2, id_log: "#btn-deploy_second_nat" }, updateGraph);
+    $("#btn-migrate_state").click({id_log: "#btn-migrate_state"}, migrateState);
+    $("#btn-delete_old_nat").click({ graph: graph3, id_log: "#btn-delete_old_nat" }, updateGraph);
+    $("#btn-undeploy_everything").click({id_log: "#btn-undeploy_everything"}, deleteGraph);
 
 
 });

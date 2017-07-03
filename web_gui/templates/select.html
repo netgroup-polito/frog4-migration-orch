@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Select</title>
+    <title>Migration Orchestrator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
     <script src="{{ url_for('static', filename='js/lib/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/lib/js.cookie.js') }}"></script>
     <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
     <script src="{{ url_for('static', filename='graphs/graph1.json') }}"></script>
@@ -11,23 +14,52 @@
     <script src="{{ url_for('static', filename='graphs/graph3.json') }}"></script>
 </head>
 <body>
-
-    <div style="margin:100px auto" align="center">
-		<img src="{{ url_for('static', filename='images/polito.png') }}" width="150"/>
+<!-- background="{{ url_for('static', filename='images/frog-background.jpg') }}"-->
+<div class="container">
+    <div class="migration-container">
+        <div class="row">
+            <div class="col-xs-6 text-center">
+                <img class="poli-img" src="{{ url_for('static', filename='images/polito.png') }}">
+            </div>
+            <div class="col-xs-6 text-center">
+                <img class="tim-img" src="{{ url_for('static', filename='images/tim.png') }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h1>NAT Live Migration</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="btn btn-primary" id="btn-deploy_initial_graph">Deploy first NAT</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="btn btn-primary" id="btn-deploy_second_nat">Deploy second NAT</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="btn btn-primary" id="btn-migrate_state">Migrate state</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="btn btn-primary" id="btn-delete_old_nat">Move traffic to second NAT</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="btn btn-primary" id="btn-undeploy_everything">Undeploy everything</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <font size="5">
-		<div style="margin:50px auto" align="center">
-		<h1>Nat Live Migration</h1>
-            <table>
-                <tr><td><input type="button" id="btn-deploy_initial_graph" value="Deploy first NAT"></td><td class="log-deploy_initial_graph"></td></tr>
-                <tr><td><input type="button" id="btn-deploy_second_nat" value="Deploy second NAT"></td><td class="log-deploy_second_nat"></td></tr>
-                <tr><td><input type="button" id="btn-migrate_state" value="Migrate state"></td><td class="log-migrate_state"></td></tr>
-                <tr><td><input type="button" id="btn-delete_old_nat" value="Move traffic to second NAT"></td><td class="log-delete_old_nat"></td></tr>
-                <tr><td><input type="button" id="btn-undeploy_everything" value="Undeploy everything"></td><td class="log-undeploy_everything"></td></tr>
-		    </table>
-		</div>
-    </font>
-
+</div>
 </body>
 </html>
