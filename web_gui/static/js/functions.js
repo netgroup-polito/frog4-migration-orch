@@ -59,7 +59,7 @@ $(document).ready(function() {
                     var promise = performLogin(username, password);
                     promise.done(function(data){
                         token = Cookies.get("token");
-                        postGraphRequest(token, graph);
+                        postGraphRequest(token, graph, id_log);
                     });
                     promise.fail(function (err){
                         logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
