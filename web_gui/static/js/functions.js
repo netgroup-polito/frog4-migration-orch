@@ -1,14 +1,19 @@
 $(document).ready(function() {
 
-    var username = "admin";
-    var password = "qwerty";
-    var migration_orch_endpoint = "http://127.0.0.1:8083/v1";
-    var login_url = migration_orch_endpoint+ "/login";
-    var graph_url = migration_orch_endpoint+ "/graphs";
-    var state_url = migration_orch_endpoint+ "/status";
-    var tenant_id = "admin";
-    var from_vnf_id = "00000001";
-    var to_vnf_id = "00000002";
+    var username = appConfig.username;
+    var password = appConfig.password;
+    var migration_orch_endpoint = appConfig.migration_orch_endpoint;
+    var login_url = migration_orch_endpoint+ appConfig.login_url;
+    var graph_url = migration_orch_endpoint+ appConfig.graph_url;
+    var state_url = migration_orch_endpoint+ appConfig.state_url;
+    var tenant_id = appConfig.tenant_id;
+    var from_vnf_id = appConfig.from_vnf_id;
+    var to_vnf_id = appConfig.to_vnf_id;
+
+    var graphs_path = appConfig.graphs_path;
+    var graph1 = graphs_path+"/"+appConfig.graph1;
+    var graph2 = graphs_path+"/"+appConfig.graph2;
+    var graph3 = graphs_path+"/"+appConfig.graph3;
 
     function logOnConsole(message){
         var now = new Date().toLocaleTimeString();
@@ -39,75 +44,79 @@ $(document).ready(function() {
     }
 
 
-    function postGraphRequest(token, graph, id_log){
+    function postGraphRequest(token, graph_path, id_log){
         logOnConsole("[postGraph] posting graph using token: " + token + "...");
-        $.ajax({
-            url: graph_url,
-            type: "POST",
-            data: JSON.stringify(graph),
-            contentType: "application/json",
-            headers: { 'X-Auth-Token': token },
-            success: function(resp) {
-                var graph_id = resp.id;
-                logOnConsole("[postGraph] posting graph using token: " + token + "...done! Graph_id: " + graph_id);
-                Cookies.set("graph_id", graph_id);
-                logOnConsole("[postGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
-                $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
-            },
-            error: function(err) {
-                if(err.status===401){
-                    var promise = performLogin(username, password);
-                    promise.done(function(data){
-                        token = Cookies.get("token");
-                        postGraphRequest(token, graph, id_log);
-                    });
-                    promise.fail(function (err){
+        $.getJSON(graph_path, function(graph) {
+            $.ajax({
+                url: graph_url,
+                type: "POST",
+                data: JSON.stringify(graph),
+                contentType: "application/json",
+                headers: {'X-Auth-Token': token},
+                success: function (resp) {
+                    var graph_id = resp.id;
+                    logOnConsole("[postGraph] posting graph using token: " + token + "...done! Graph_id: " + graph_id);
+                    Cookies.set("graph_id", graph_id);
+                    logOnConsole("[postGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
+                    $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
+                },
+                error: function (err) {
+                    if (err.status === 401) {
+                        var promise = performLogin(username, password);
+                        promise.done(function (data) {
+                            token = Cookies.get("token");
+                            postGraphRequest(token, graph, id_log);
+                        });
+                        promise.fail(function (err) {
+                            logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
+                            logOnConsole("Exception: " + err.status + " " + err.statusText + " " + err.responseText);
+                            $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
+                        });
+                    } else {
                         logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
                         logOnConsole("Exception: " + err.status + " " + err.statusText + " " + err.responseText);
                         $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
-                    });
-                }else{
-                    logOnConsole("[postGraph] posting graph using token: " + token + "...failed!");
-                    logOnConsole("Exception: " + err.status + " " + err.statusText + " " + err.responseText);
-                    $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
+                    }
                 }
-            }
+            });
         });
     }
 
-    function updateGraphRequest(token, graph_id, graph, id_log) {
+    function updateGraphRequest(token, graph_id, graph_path, id_log) {
         logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...");
-        $.ajax({
-            url: graph_url+"/"+graph_id,
-            type: "PUT",
-            data: JSON.stringify(graph),
-            contentType: "application/json",
-            headers: { 'X-Auth-Token': token },
-            success: function(resp) {
-                var new_graph_id = resp.id;
-                logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + new_graph_id);
-                Cookies.set("graph_id", new_graph_id);
-                logOnConsole("[updateGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
-                $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
-            },
-            error: function(err) {
-                if(err.status===401){
-                    var promise = performLogin(username, password);
-                    promise.done(function(data){
-                        token = Cookies.get("token");
-                        updateGraphRequest(token, graph_id, graph);
-                    });
-                    promise.fail(function (err){
+        $.getJSON(graph_path, function(graph) {
+            $.ajax({
+                url: graph_url + "/" + graph_id,
+                type: "PUT",
+                data: JSON.stringify(graph),
+                contentType: "application/json",
+                headers: {'X-Auth-Token': token},
+                success: function (resp) {
+                    var new_graph_id = resp.id;
+                    logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + new_graph_id);
+                    Cookies.set("graph_id", new_graph_id);
+                    logOnConsole("[updateGraph] Cookie set 'graph_id': " + Cookies.get('graph_id'));
+                    $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
+                },
+                error: function (err) {
+                    if (err.status === 401) {
+                        var promise = performLogin(username, password);
+                        promise.done(function (data) {
+                            token = Cookies.get("token");
+                            updateGraphRequest(token, graph_id, graph);
+                        });
+                        promise.fail(function (err) {
+                            logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
+                            logOnConsole("Exception:" + err.status + " " + err.statusText + " " + err.responseText);
+                            $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
+                        });
+                    } else {
                         logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
                         logOnConsole("Exception:" + err.status + " " + err.statusText + " " + err.responseText);
                         $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
-                    });
-                }else {
-                    logOnConsole("[updateGraph] updating graph with graph_id: " + graph_id + " using token: " + token + "...failed!");
-                    logOnConsole("Exception:" + err.status + " " + err.statusText + " " + err.responseText);
-                    $(id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -192,7 +201,7 @@ $(document).ready(function() {
             promise.done(function(data){
                     token = Cookies.get("token");
                     logOnConsole("[postGraph] token is null, so perform the login...done! Token: " + token);
-                    postGraphRequest(token, params.data.graph, params.data.id_log);
+                    postGraphRequest(token, params.data.graph_path, params.data.id_log);
             });
             promise.fail(function (err){
                 logOnConsole("[postGraph] token is null, so perform the login...failed!");
@@ -200,7 +209,7 @@ $(document).ready(function() {
                 $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
         }else{
-            postGraphRequest(token, params.data.graph, params.data.id_log);
+            postGraphRequest(token, params.data.graph_path, params.data.id_log);
         }
     }
 
@@ -213,7 +222,7 @@ $(document).ready(function() {
             promise.done(function(data){
                     token = Cookies.get("token");
                     logOnConsole("[updateGraph] token is null, so perform the login...done! Token: " + token);
-                    updateGraphRequest(token, graph_id, params.data.graph, params.data.id_log);
+                    updateGraphRequest(token, graph_id, params.data.graph_path, params.data.id_log);
             });
             promise.fail(function (err){
                 logOnConsole("[updateGraph] token is null, so perform the login...failed!");
@@ -221,7 +230,7 @@ $(document).ready(function() {
                 $(params.data.id_log).removeClass("btn-primary").removeClass("btn-success").addClass("btn-danger");
             });
         }else{
-            updateGraphRequest(token, graph_id, params.data.graph, params.data.id_log);
+            updateGraphRequest(token, graph_id, params.data.graph_path, params.data.id_log);
         }
     }
 
@@ -276,11 +285,10 @@ $(document).ready(function() {
     }
 
 
-    $("#btn-deploy_initial_graph").click({ graph: graph1, id_log: "#btn-deploy_initial_graph" }, postGraph);
-    $("#btn-deploy_second_nat").click({ graph: graph2, id_log: "#btn-deploy_second_nat" }, updateGraph);
+    $("#btn-deploy_initial_graph").click({ graph_path: graph1, id_log: "#btn-deploy_initial_graph" }, postGraph);
+    $("#btn-deploy_second_nat").click({ graph_path: graph2, id_log: "#btn-deploy_second_nat" }, updateGraph);
     $("#btn-migrate_state").click({id_log: "#btn-migrate_state"}, migrateState);
-    $("#btn-delete_old_nat").click({ graph: graph3, id_log: "#btn-delete_old_nat" }, updateGraph);
+    $("#btn-delete_old_nat").click({ graph_path: graph3, id_log: "#btn-delete_old_nat" }, updateGraph);
     $("#btn-undeploy_everything").click({id_log: "#btn-undeploy_everything"}, deleteGraph);
-
 
 });
