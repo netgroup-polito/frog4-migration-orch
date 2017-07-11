@@ -9,9 +9,7 @@
 				"functional-capability": "nat",
 				"ports": [{
 						"name": "management",
-						"id": "L3Port:0",
-						"mac": "52:54:00:3e:28:86",
-						"trusted": true
+						"id": "L3Port:0"
 					},
 					{
 						"name": "data-port",
