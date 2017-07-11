@@ -1,4 +1,4 @@
-var graph1 = {
+{
 	"forwarding-graph": {
 		"name": "ISP-Graph",
 		"VNFs": [{
@@ -38,6 +38,22 @@ var graph1 = {
 					"id": "L2Port:3",
 					"name": "to-eth0"
 				}]
+			},
+			{
+				"id": "00000003",
+				"name": "nat",
+				"vnf_template": "8Z7K7N",
+				"domain": "onos_domain",
+				"functional-capability": "nat",
+				"ports": [{
+						"name": "data-port",
+						"id": "L3Port:0"
+					},
+					{
+						"name": "data-port",
+						"id": "L3Port:1"
+					}
+				]
 			}
 		],
 		"end-points": [{
@@ -85,7 +101,7 @@ var graph1 = {
 					"actions": [{
 						"output_to_port": "vnf:00000001:L3Port:1"
 					}],
-					"priority": 40001,
+					"priority": 50000,
 					"id": "000000001"
 				},
 				{
@@ -95,7 +111,7 @@ var graph1 = {
 					"actions": [{
 						"output_to_port": "endpoint:00000002"
 					}],
-					"priority": 40001,
+					"priority": 50000,
 					"id": "000000002"
 				},
 				{
@@ -105,7 +121,7 @@ var graph1 = {
 					"actions": [{
 						"output_to_port": "vnf:00000001:L3Port:2"
 					}],
-					"priority": 40001,
+					"priority": 50000,
 					"id": "000000003"
 				},
 				{
@@ -115,7 +131,7 @@ var graph1 = {
 					"actions": [{
 						"output_to_port": "endpoint:00000001"
 					}],
-					"priority": 40001,
+					"priority": 50000,
 					"id": "000000004"
 				},
 
@@ -178,6 +194,46 @@ var graph1 = {
 					"actions": [{
 						"output_to_port": "vnf:00000002:L2Port:3"
 					}]
+				},
+{
+					"match": {
+						"port_in": "endpoint:00000002"
+					},
+					"actions": [{
+						"output_to_port": "vnf:00000003:L3Port:0"
+					}],
+					"priority": 40001,
+					"id": "000000011"
+				},
+				{
+					"match": {
+						"port_in": "vnf:00000003:L3Port:0"
+					},
+					"actions": [{
+						"output_to_port": "endpoint:00000002"
+					}],
+					"priority": 40001,
+					"id": "000000012"
+				},
+				{
+					"match": {
+						"port_in": "endpoint:00000001"
+					},
+					"actions": [{
+						"output_to_port": "vnf:00000003:L3Port:1"
+					}],
+					"priority": 40001,
+					"id": "000000013"
+				},
+				{
+					"match": {
+						"port_in": "vnf:00000003:L3Port:1"
+					},
+					"actions": [{
+						"output_to_port": "endpoint:00000001"
+					}],
+					"priority": 40001,
+					"id": "000000014"
 				}
 			]
 		}
