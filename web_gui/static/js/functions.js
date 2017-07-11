@@ -9,7 +9,6 @@ $(document).ready(function() {
     var tenant_id = appConfig.tenant_id;
     var from_vnf_id = appConfig.from_vnf_id;
     var to_vnf_id = appConfig.to_vnf_id;
-
     var graphs_path = appConfig.graphs_path;
     var graph1 = graphs_path+"/"+appConfig.graph1;
     var graph2 = graphs_path+"/"+appConfig.graph2;
