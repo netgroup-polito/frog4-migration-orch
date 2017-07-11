@@ -128,7 +128,7 @@ $(document).ready(function() {
             headers: { 'X-Auth-Token': token },
             success: function(resp) {
                 logOnConsole("[deleteGraph] deleting graph with graph_id: " + graph_id + " using token: " + token + "...done! Graph_id: " + graph_id);
-                logOnConsole("[deleteGraph] Cookie 'graph_id': " + Cookies.get('graph_id') + "removed");
+                logOnConsole("[deleteGraph] Cookie 'graph_id': " + Cookies.get('graph_id') + " removed");
                 Cookies.remove("graph_id");
                 $(id_log).removeClass("btn-primary").removeClass("btn-danger").addClass("btn-success");
             },
