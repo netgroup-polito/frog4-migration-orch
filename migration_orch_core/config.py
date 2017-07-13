@@ -34,8 +34,6 @@ class Configuration(object, metaclass=Singleton):
                 self._LOG_FILE = None
             self._LOG_LEVEL = configParser.get('logging', 'log_level')
 
-            self._GRAPHS_PATH = configParser.get('graphs','graphs_path')
-
         except Exception as ex:
             raise WrongConfigurationFile(str(ex))
 
@@ -63,8 +61,3 @@ class Configuration(object, metaclass=Singleton):
     @property
     def LOG_LEVEL(self):
         return self._LOG_LEVEL
-
-    @property
-    def GRAPHS_PATH(self):
-        return self._GRAPHS_PATH
-
