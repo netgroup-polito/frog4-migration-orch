@@ -19,8 +19,8 @@ This document presents how to install and run the FROG4 Migration Orchestrator.
 ## Configuration file
 
 In order to properly configure the migration orchestrator, you should edit the configuration files. 
-The first one [configuration file](https://github.com/netgroup-polito/frog4-migration-orch/blob/master/config/default-config.ini) includes the general settings of the module.
-The second one [app-config](https://github.com/netgroup-polito/frog4-migration-orch/blob/master/web_gui/static/appConfig.js) contains the parameters of migration that you have to set only if you want to use the web-gui. If you want to use the migration orchestrator without the gui you don't need to edit this file.
+The first one, [configuration file](https://github.com/netgroup-polito/frog4-migration-orch/blob/master/config/default-config.ini) includes the general settings of the module.
+The second one, [app-config](https://github.com/netgroup-polito/frog4-migration-orch/blob/master/web_gui/static/appConfig.js) contains the parameters of migration that you have to set only if you want to use the web-gui. If you want to use the migration orchestrator without the gui you don't need to edit this file.
 
 ## Start
 
